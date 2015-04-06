@@ -27,7 +27,10 @@ gem 'sdoc', '~> 0.4.0',          group: :doc
 gem 'spring',        group: :development
 
 gem "om", :git=>'https://github.com/scande3/om.git'
-gem 'hydra'
+gem 'hydra-head', :git=>'https://github.com/projecthydra/hydra-head.git'
+#gem 'active-fedora', :git=>'https://github.com/boston-library/active_fedora.git', :branch=>'extended_cmodel_support'
+gem 'active-fedora', :path => '/home/bluewolf/bpl/active_fedora'
+#gem "geomash", :path => '/home/bluewolf/workpls/Bplgeo'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
