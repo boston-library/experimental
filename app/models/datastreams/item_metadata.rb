@@ -19,6 +19,18 @@ class Datastreams::ItemMetadata < ActiveFedora::OmDatastream
 
   set_terminology do |t|
     t.root(path: "mods", :xmlns=>"http://www.loc.gov/mods/v3")
+
+
+
+      t.agentset(:path => "agentSet") {
+        t.agent(:path => "agent") {
+          t.role(:path => "role")
+          t.name(:path => "name") {
+            t.type(path: {attribute: "type"})
+          }
+        }
+      }
+
     t.title_info(path: "titleInfo") {
     	t.title(path: "title")
     	t.sub_title(path: "subTitle")
@@ -158,6 +170,17 @@ class Datastreams::ItemMetadata < ActiveFedora::OmDatastream
     self.mods(0).title_info(title_index).title = main_title unless main_title.blank?
 
     self.mods(0).title_info(title_index).sub_title = subtitle unless subtitle.blank?
+
+  end
+
+  def insert_agent(names=nil, types=nil, roles=nil)
+    agent_set_index = self.agentset.count
+    0.upto names.length-1 do |pos|
+      agent_index = self.agentset(agent_set_index).agent.count
+      self.agentset(agent_index).agent(agent_index).name = names[pos] unless names[pos].blank?
+      self.agentset(agent_index).agent(agent_index).type = types[pos] unless types[pos].blank?
+      self.agentset(agent_index).agent(agent_index).role = roles[pos] unless roles[pos].blank?
+    end
 
   end
 
