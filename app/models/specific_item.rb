@@ -1,2 +1,3 @@
 class SpecificItem < Item
+
 end

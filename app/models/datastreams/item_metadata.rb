@@ -2,6 +2,21 @@ require "om"
 class Datastreams::ItemMetadata < ActiveFedora::OmDatastream
 	include OM::XML::Document
 
+  def self.default_attributes
+    super.merge(:mimeType => 'application/xml')
+  end
+
+  MODS_NS = 'http://www.loc.gov/mods/v3'
+  MODS_SCHEMA = 'http://www.loc.gov/standards/mods/v3/mods-3-5.xsd'
+  MODS_PARAMS = {
+      "version"            => "3.5",
+      "xmlns:xlink"        => "http://www.w3.org/1999/xlink",
+      "xmlns:xsi"          => "http://www.w3.org/2001/XMLSchema-instance",
+      #"xmlns"              => MODS_NS,
+      "xsi:schemaLocation" => "#{MODS_NS} #{MODS_SCHEMA}",
+      "xmlns:mods"         => "http://www.loc.gov/mods/v3"
+  }
+
   set_terminology do |t|
     t.root(path: "mods", :xmlns=>"http://www.loc.gov/mods/v3")
     t.title_info(path: "titleInfo") {
@@ -100,7 +115,41 @@ class Datastreams::ItemMetadata < ActiveFedora::OmDatastream
   end
 
   def self.xml_template
-    Nokogiri::XML.parse('<mods xmlns="http://www.loc.gov/mods/v3"/>')
+    #Nokogiri::XML.parse('<mods xmlns="http://www.loc.gov/mods/v3"/>')
+    #Nokogiri.XML('<mods xmlns="http://www.loc.gov/mods/v3"/>', nil, 'UTF-8')
+
+    builder = Nokogiri::XML::Builder.new(:encoding => "UTF-8") do |xml|
+      xml.mods(MODS_PARAMS) {
+        xml.parent.namespace = xml.parent.namespace_definitions.find{|ns|ns.prefix=="mods"}
+
+      }
+    end
+    return builder.doc
+    #return builder
+  end
+
+  def to_xml(xml = nil)
+    xml = self.ng_xml if xml.nil?
+    ng_xml = self.ng_xml
+    if ng_xml.respond_to?(:root) && ng_xml.root.nil? && self.class.respond_to?(:root_property_ref) && !self.class.root_property_ref.nil?
+      ng_xml = self.class.generate(self.class.root_property_ref, "")
+      if xml.root.nil?
+        xml = ng_xml
+      end
+    end
+
+    unless xml == ng_xml || ng_xml.root.nil?
+      if xml.kind_of?(Nokogiri::XML::Document)
+        xml.root.add_child(ng_xml.root)
+      elsif xml.kind_of?(Nokogiri::XML::Node)
+        xml.add_child(ng_xml.root)
+      else
+        raise "You can only pass instances of Nokogiri::XML::Node into this method.  You passed in #{xml}"
+      end
+    end
+
+    return xml.to_xml(:encoding=>'UTF-8').strip
+    #return xml.to_xml.strip
   end
 
   def insert_title(nonSort=nil, main_title=nil, subtitle=nil)
@@ -113,7 +162,7 @@ class Datastreams::ItemMetadata < ActiveFedora::OmDatastream
   end
 
 
-  def prefix
+  def prefix(path = nil)
     # set a datastream prefix if you need to namespace terms that might occur in multiple data streams 
     ""
   end

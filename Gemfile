@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.1.2'
+gem 'rails', '4.2.1'
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3'
 # Use SCSS for stylesheets
@@ -26,10 +26,17 @@ gem 'sdoc', '~> 0.4.0',          group: :doc
 # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
 gem 'spring',        group: :development
 
-gem "om", :git=>'https://github.com/scande3/om.git'
-gem 'hydra-head', :git=>'https://github.com/projecthydra/hydra-head.git'
-#gem 'active-fedora', :git=>'https://github.com/boston-library/active_fedora.git', :branch=>'extended_cmodel_support'
-gem 'active-fedora', :path => '/home/bluewolf/bpl/active_fedora'
+#gem "om", :git=>'https://github.com/scande3/om.git'
+#gem 'hydra-head', '8.1.0'
+gem 'hydra-head', '7.0.1'
+gem "om", :git=>'https://github.com/boston-library/om.git'
+gem 'active-fedora', '7.0.4'
+
+#gem 'hydra-head', :git=>'https://github.com/projecthydra/hydra-head.git'
+#gem 'active-fedora', :git=>'https://github.com/boston-library/active_fedora.git', :branch=>'model_inheritance'
+#gem 'active-fedora', :path => '/home/bluewolf/bpl/active_fedora'
+#gem 'active-fedora', :git=>'https://github.com/stkenny/active_fedora.git', :branch=>'model_inheritance'
+#gem 'active-fedora', '8.0.1'
 #gem "geomash", :path => '/home/bluewolf/workpls/Bplgeo'
 
 # Use ActiveModel has_secure_password
