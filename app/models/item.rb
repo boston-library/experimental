@@ -1,6 +1,8 @@
 class Item < ActiveFedora::Base
   has_metadata 'descMetadata', type: Datastreams::ItemMetadata
 
+  include Hydra::PCDM::ObjectBehavior
+
 =begin
   def assert_content_model
     model_list = [self.class.to_s]

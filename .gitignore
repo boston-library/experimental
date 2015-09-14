@@ -20,9 +20,9 @@ pickle-email-*.html
 # Specific configuration files #
 ################################
 hydra-ldap.yml
-database.yml
-fedora.yml
-solr.yml
+#database.yml
+#fedora.yml
+#solr.yml
 role_map_cucumber.yml
 role_map_development.yml
 role_map_production.yml
